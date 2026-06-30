@@ -7,7 +7,8 @@ function M:peek(job)
 	end	
 	ya.sleep(math.max(0, 0.1 + start - os.clock()))
 	ya.image_show(cache, job.area)
-	ya.preview_widgets(job, {})
+	-- ya.preview_widgets(job, {})
+	ya.preview_widget(job, {})
 end
 
 
@@ -15,7 +16,9 @@ function M:seek(job, units)
 	local h = cx.active.current.hovered
 	if h and h.url == job.file.url then
 		local step = ya.clamp(-1, units, 1)
-		ya.manager_emit("peek", { math.max(0, cx.active.preview.skip + step), only_if = job.file.url })
+		-- ya.manager_emit("peek", { math.max(0, cx.active.preview.skip + step), only_if = job.file.url })
+		ya.emit("peek", { math.max(0, cx.active.preview.skip + step), only_if = job.file.url })
+
 	end
 end
 
@@ -27,7 +30,7 @@ function M:preload(job)
 	
 	local percentage = 5 + job.skip
 	if percentage > 95 then
-		ya.manager_emit("peek", { 90, only_if = job.file.url, upper_bound = true })
+		ya.emit("peek", { 90, only_if = job.file.url, upper_bound = true })
 		return 2
 	end
 	local cache = ya.file_cache(job)
